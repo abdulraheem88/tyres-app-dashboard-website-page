@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tire Wholesale Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      background: #F1F4F8;
+    }
+
+    .header {
+      width: 100%;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header .logo-area {
+      width: 220px;
+      background: black;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .header .logo-area img {
+      height: 45px;
+      object-fit: contain;
+    }
+
+    .header .header-icons {
+      flex: 1;
+      background: #6E7681;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 20px;
+      gap: 20px;
+      color: white;
+      font-size: 18px;
+    }
+
+    .hamburger {
+      display: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .sidebar {
+      width: 220px;
+      background: #fff;
+      position: fixed;
+      top: 60px;
+      bottom: 0;
+      left: 0;
+      border-right: 1px solid #ddd;
+      padding: 20px 0;
+      overflow-y: auto;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .menu-section {
+      padding: 10px 20px;
+    }
+
+    .menu-item {
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      color: #333;
+    }
+
+    .submenu {
+      padding-left: 15px;
+      margin-top: 5px;
+      display: none;
+    }
+
+    .submenu label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      color: #444;
+      font-size: 14px;
+    }
+
+    .main {
+      margin-left: 220px;
+      margin-top: 60px;
+      padding: 20px;
+    }
+
+    .order-countdown {
+      background: white;
+      padding: 10px;
+      margin-bottom: 20px;
+      font-weight: bold;
+      color: red;
+      border-radius: 4px;
+    }
+
+    .product-card {
+      background: white;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      flex-wrap: wrap;
+    }
+
+    .product-card img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+    }
+
+    .product-info {
+      flex: 1;
+      margin-left: 15px;
+    }
+
+    .product-info h3 {
+      font-size: 16px;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    .product-meta {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .price-box {
+      min-width: 220px;
+    }
+
+    .price-box-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .cost {
+      font-weight: bold;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .loc-info {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .quantity-box {
+      display: flex;
+      align-items: center;
+    }
+
+    .quantity-box input {
+      width: 40px;
+      text-align: center;
+      margin-left: 5px;
+    }
+
+    .cart-btn {
+      background: red;
+      color: white;
+      padding: 8px 12px;
+      margin-top: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      border: none;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        z-index: 999;
+      }
+
+      .sidebar.active {
+        transform: translateX(0);
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .header {
+        justify-content: space-between;
+      }
+
+      .header .logo-area {
+        width: 70px;
+        height: 60px;
+        background: red;
+        justify-content: center;
+      }
+
+      .header .logo-area img {
+        display: none;
+      }
+
+      .hamburger {
+        display: block;
+        color: white;
+      }
+
+      .header-icons {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo-area">
+      <i class="fas fa-bars hamburger" id="hamburger"></i>
+      <img src="assets/logo.png" alt="Logo">
+    </div>
+    <div class="header-icons">
+      <i class="fas fa-search"></i>
+      <i class="fas fa-shopping-cart"></i>
+      <i class="fas fa-user"></i>
+    </div>
+  </div>
+
+  <div class="sidebar" id="sidebar">
+    <h2>TIRE WHOLESALE ONLINE</h2>
+    <div class="menu-section">
+      <div class="menu-item" onclick="toggleSubmenu()">Dealer Search <i class="fas fa-chevron-down"></i></div>
+      <div class="submenu" id="submenu">
+        <label><input type="checkbox"> All Season Tires</label>
+        <label><input type="checkbox"> Winter Tires</label>
+        <label><input type="checkbox"> Steel Wheels</label>
+        <label><input type="checkbox"> Alloy Wheels</label>
+        <label><input type="checkbox"> Block Dealer Price</label>
+      </div>
+    </div>
+    <div class="menu-section">
+      <div class="menu-item"><i class="fas fa-history"></i> History</div>
+      <div class="menu-item"><i class="fas fa-shopping-cart"></i> Cart</div>
+      <div class="menu-item"><i class="fas fa-sign-out-alt"></i> Logout</div>
+    </div>
+  </div>
+
+  <!-- Inside .main -->
+<div class="main">
+    <div class="order-countdown" id="countdown">ORDER COUNTDOWN: Loading...</div>
+  
+    <!-- Product Cards Container -->
+    <div class="product-list">
+  
+      <!-- Product 1 -->
+      <div class="product-card">
+        <img src="assets/t1.jpeg" alt="Product">
+        <div class="product-info">
+          <h3>AUTEL PRGMM UNIVERSAL TPMS SENSOR</h3>
+          <div class="product-meta">Category: TPMS Sensors</div>
+        </div>
+        <div class="price-box">
+          <div class="price-box-row">
+            <div class="cost">$59.99</div>
+            <div class="loc-info">LOC: 23 | LOC+: 0</div>
+            <div class="quantity-box">Qty: <input type="number" value="1" min="1" /></div>
+          </div>
+          <button class="cart-btn"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+        </div>
+      </div>
+  
+      <!-- Product 2 -->
+      <div class="product-card">
+        <img src="assets/t2.jpeg" alt="Product">
+        <div class="product-info">
+          <h3>MICHELIN X-ICE SNOW TIRE</h3>
+          <div class="product-meta">Category: Winter Tires</div>
+        </div>
+        <div class="price-box">
+          <div class="price-box-row">
+            <div class="cost">$129.99</div>
+            <div class="loc-info">LOC: 45 | LOC+: 5</div>
+            <div class="quantity-box">Qty: <input type="number" value="1" min="1" /></div>
+          </div>
+          <button class="cart-btn"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+        </div>
+      </div>
+  
+      <!-- Product 3 -->
+      <div class="product-card">
+        <img src="assets/t3.jpeg" alt="Product">
+        <div class="product-info">
+          <h3>BLACK STEEL WHEEL 17x7</h3>
+          <div class="product-meta">Category: Steel Wheels</div>
+        </div>
+        <div class="price-box">
+          <div class="price-box-row">
+            <div class="cost">$89.50</div>
+            <div class="loc-info">LOC: 12 | LOC+: 1</div>
+            <div class="quantity-box">Qty: <input type="number" value="1" min="1" /></div>
+          </div>
+          <button class="cart-btn"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+  
+
+  
+
+  <script>
+    // Toggle submenu
+    function toggleSubmenu() {
+      const submenu = document.getElementById("submenu");
+      submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+    }
+
+    // Toggle sidebar on hamburger click
+    document.getElementById("hamburger").addEventListener("click", () => {
+      const sidebar = document.getElementById("sidebar");
+      sidebar.classList.toggle("active");
+    });
+
+    // Countdown logic
+    const targetDate = new Date();
+    targetDate.setHours(targetDate.getHours() + 10);
+    targetDate.setMinutes(targetDate.getMinutes() + 40);
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = targetDate - now;
+
+      const countdown = document.getElementById("countdown");
+
+      if (diff <= 0) {
+        countdown.innerText = "ORDER COUNTDOWN: EXPIRED";
+        return;
+      }
+
+      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const m = Math.floor((diff / 1000 / 60) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+
+      countdown.innerText = `ORDER COUNTDOWN: ${h}h ${m}m ${s}s`;
+    }
+
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
